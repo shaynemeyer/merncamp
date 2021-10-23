@@ -9,7 +9,7 @@ import PostList from "../../components/cards/PostList";
 import People from "../../components/cards/People";
 
 const Dashboard = () => {
-  const [state] = useContext(UserContext);
+  const [state, setState] = useContext(UserContext);
   const [content, setContent] = useState("");
   const [image, setImage] = useState({});
   const [posts, setPosts] = useState([]);
@@ -20,14 +20,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (state && state.token) {
-      fetchUserPosts();
+      newsFeed();
       findPeople();
     }
   }, [state && state.token]);
 
-  const fetchUserPosts = async () => {
+  const newsFeed = async () => {
     try {
-      const { data } = await axios.get("/user-posts");
+      const { data } = await axios.get("/news-feed");
       // console.log("user posts =>", data);
       setPosts(data.posts);
     } catch (err) {
@@ -52,12 +52,12 @@ const Dashboard = () => {
         `${process.env.NEXT_PUBLIC_API}/create-post`,
         { content, image }
       );
-      console.log("create post =>", data);
+      // console.log("create post =>", data);
 
       if (data.error) {
         toast.error(data.error);
       } else {
-        fetchUserPosts();
+        newsFeed();
         toast.success("Post created!");
         setContent("");
         setImage({});
@@ -71,7 +71,7 @@ const Dashboard = () => {
     const file = e.target.files[0]; // get the first file in the array.
     let formData = new FormData();
     formData.append("image", file);
-    console.log(...formData);
+    // console.log(...formData);
     setUploading(true);
     try {
       const { data } = await axios.post("/upload-image", formData);
@@ -93,17 +93,26 @@ const Dashboard = () => {
 
       const { data } = await axios.delete(`/delete-post/${post._id}`);
       toast.error("Post deleted!");
-      fetchUserPosts();
+      newsFeed();
     } catch (err) {
       console.log(err);
     }
   };
 
   const handleFollow = async (user) => {
-    // console.log("add this user to following list =>", user);
     try {
       const { data } = await axios.put("/user-follow", { _id: user._id });
-      console.log("HANDLE FOLLOW RESPONSE =>", data);
+      let auth = JSON.parse(localStorage.getItem("auth"));
+      auth.user = data;
+      localStorage.setItem("auth", JSON.stringify(auth));
+      // update context
+      setState({ ...state, user: data });
+      // update people state
+      let filtered = people.filter((person) => person._id !== user._id);
+      setPeople(filtered);
+      // rerender posts in newsfeed
+      newsFeed();
+      toast.success(`Following ${user.name}`);
     } catch (err) {
       console.log(err);
     }

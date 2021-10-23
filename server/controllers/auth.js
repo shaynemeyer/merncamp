@@ -214,3 +214,30 @@ export const findPeople = async (req, res) => {
     console.log(err);
   }
 };
+
+// middleware
+export const addFollower = async (req, res, next) => {
+  // console.log("ADD FOLLOWER", req.body);
+
+  await User.findByIdAndUpdate(req.body._id, {
+    $addToSet: { followers: req.user._id },
+  });
+  next();
+};
+
+export const userFollow = async (req, res) => {
+  // console.log("USER FOLLOW", req.body);
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { following: req.body._id },
+      },
+      { new: true }
+    ).select("-password -secret");
+
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+  }
+};

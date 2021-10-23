@@ -14,6 +14,7 @@ const People = ({ people, handleFollow }) => {
     return "/images/logo.png";
   };
 
+  console.log(people);
   return (
     <>
       <List
@@ -25,9 +26,9 @@ const People = ({ people, handleFollow }) => {
               avatar={<Avatar src={imageSource(user)} />}
               title={
                 <div className="d-flex justify-content-between">
-                  {user.name}{" "}
+                  {user.name}
                   <span
-                    onClick={(user) => handleFollow(user)}
+                    onClick={() => handleFollow(user)}
                     className="text-primary me-2 pointer"
                   >
                     Follow

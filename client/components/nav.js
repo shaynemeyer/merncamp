@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { UserContext } from "../context";
 import { useRouter } from "next/router";
+import { Avatar } from "antd";
 
 const Nav = () => {
   const [current, setCurrent] = useState("");
@@ -28,7 +29,7 @@ const Nav = () => {
         <a
           className={`nav-link text-light logo ${current === "/" && "active"}`}
         >
-          MERNCAMP
+          <Avatar src="/images/logo.png" /> MERNCAMP
         </a>
       </Link>
 

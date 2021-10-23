@@ -14,7 +14,6 @@ const People = ({ people, handleFollow }) => {
     return "/images/logo.png";
   };
 
-  console.log(people);
   return (
     <>
       <List

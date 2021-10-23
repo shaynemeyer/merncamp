@@ -1,10 +1,11 @@
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "../../context";
-import UserRoute from "../../components/routes/UserRoute";
-import PostForm from "../../components/forms/PostForm";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { UserContext } from "../../context";
+import UserRoute from "../../components/routes/UserRoute";
+import PostForm from "../../components/forms/PostForm";
 import PostList from "../../components/cards/PostList";
 import People from "../../components/cards/People";
 
@@ -23,12 +24,13 @@ const Dashboard = () => {
       newsFeed();
       findPeople();
     }
+    console.log(JSON.stringify(state.user));
   }, [state && state.token]);
 
   const newsFeed = async () => {
     try {
       const { data } = await axios.get("/news-feed");
-      console.log("user posts =>", data);
+      // console.log("user posts =>", data);
       setPosts(data);
     } catch (err) {
       console.log(err);
@@ -108,7 +110,7 @@ const Dashboard = () => {
       // update context
       setState({ ...state, user: data });
       // update people state
-      let filtered = people.filter((person) => person._id !== user._id);
+      let filtered = people.filter((p) => p._id !== user._id);
       setPeople(filtered);
       // rerender posts in newsfeed
       newsFeed();
@@ -141,6 +143,11 @@ const Dashboard = () => {
           <PostList posts={posts} handleDelete={handleDelete} />
         </div>
         <div className="col-md-4">
+          {state && state.user && state.user.following && (
+            <Link href={`/user/following`}>
+              <a className="h6">{state.user.following.length} Following</a>
+            </Link>
+          )}
           <People people={people} handleFollow={handleFollow} />
         </div>
       </div>

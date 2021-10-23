@@ -7,12 +7,14 @@ import {
   CommentOutlined,
   EditOutlined,
   DeleteOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 import PostImage from "../images/PostImage";
 import { UserContext } from "../../context";
 import { useRouter } from "next/router";
+import { imageSource } from "../../functions";
 
-const PostList = ({ posts, handleDelete }) => {
+const PostList = ({ posts, handleDelete, handleLike, handleUnlike }) => {
   const [state] = useContext(UserContext);
 
   const router = useRouter();
@@ -23,9 +25,12 @@ const PostList = ({ posts, handleDelete }) => {
         posts.map((post) => (
           <div key={post.id} className="card mb-5">
             <div className="card-header">
-              <Avatar size={40} className="mb-2">
-                {post.postedBy.name[0]}
-              </Avatar>{" "}
+              <Avatar
+                size={40}
+                className="mb-2"
+                src={imageSource(post.postedBy)}
+              />
+
               <span className="pt-2 ml-3" style={{ marginLeft: ".5rem" }}>
                 {post.postedBy.name}
               </span>
@@ -39,8 +44,18 @@ const PostList = ({ posts, handleDelete }) => {
             <div className="card-footer">
               {post.image && <PostImage url={post.image.url} />}
               <div className="d-flex">
-                <HeartOutlined className="text-danger pt-2 h5" />
-                <div className="pt-2 px-1">3 likes</div>
+                {post.likes.includes(state.user._id) ? (
+                  <HeartFilled
+                    onClick={() => handleUnlike(post._id)}
+                    className="text-danger pt-2 h5"
+                  />
+                ) : (
+                  <HeartOutlined
+                    onClick={() => handleLike(post._id)}
+                    className="text-danger pt-2 h5"
+                  />
+                )}
+                <div className="pt-2 px-1">{post.likes.length} likes</div>
                 <CommentOutlined className="text-danger pt-2 h5 px-2" />
                 <div className="pt-2 px-1">2 comments</div>
 

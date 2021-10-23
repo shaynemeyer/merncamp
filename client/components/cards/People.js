@@ -1,19 +1,7 @@
-import { useContext } from "react";
 import { Avatar, List } from "antd";
-import { format } from "date-fns";
-import { useRouter } from "next/router";
-import { UserContext } from "../../context";
+import { imageSource } from "../../functions";
 
 const People = ({ people, handleFollow }) => {
-  const [state] = useContext(UserContext);
-
-  const router = useRouter();
-
-  const imageSource = (user) => {
-    if (user.image) return user.image.url;
-    return "/images/logo.png";
-  };
-
   return (
     <>
       <List

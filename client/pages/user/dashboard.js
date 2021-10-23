@@ -24,7 +24,6 @@ const Dashboard = () => {
       newsFeed();
       findPeople();
     }
-    console.log(JSON.stringify(state.user));
   }, [state && state.token]);
 
   const newsFeed = async () => {
@@ -120,6 +119,24 @@ const Dashboard = () => {
     }
   };
 
+  const handleLike = async (_id) => {
+    try {
+      const { data } = await axios.put("/like-post", { _id });
+      newsFeed();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUnlike = async (_id) => {
+    try {
+      const { data } = await axios.put("/unlike-post", { _id });
+      newsFeed();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <UserRoute>
       <div className="container-fluid">
@@ -140,7 +157,12 @@ const Dashboard = () => {
             image={image}
           />
           <br />
-          <PostList posts={posts} handleDelete={handleDelete} />
+          <PostList
+            posts={posts}
+            handleDelete={handleDelete}
+            handleLike={handleLike}
+            handleUnlike={handleUnlike}
+          />
         </div>
         <div className="col-md-4">
           {state && state.user && state.user.following && (

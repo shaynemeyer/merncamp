@@ -99,6 +99,16 @@ const Dashboard = () => {
     }
   };
 
+  const handleFollow = async (user) => {
+    // console.log("add this user to following list =>", user);
+    try {
+      const { data } = await axios.put("/user-follow", { _id: user._id });
+      console.log("HANDLE FOLLOW RESPONSE =>", data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <UserRoute>
       <div className="container-fluid">
@@ -122,7 +132,7 @@ const Dashboard = () => {
           <PostList posts={posts} handleDelete={handleDelete} />
         </div>
         <div className="col-md-4">
-          <People people={people} />
+          <People people={people} handleFollow={handleFollow} />
         </div>
       </div>
     </UserRoute>

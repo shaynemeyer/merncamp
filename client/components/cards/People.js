@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { useRouter } from "next/router";
 import { UserContext } from "../../context";
 
-const People = ({ people }) => {
+const People = ({ people, handleFollow }) => {
   const [state] = useContext(UserContext);
 
   const router = useRouter();
@@ -25,7 +25,13 @@ const People = ({ people }) => {
               avatar={<Avatar src={imageSource(user)} />}
               title={
                 <div className="d-flex justify-content-between">
-                  {user.name} <span className="text-primary me-2">Follow</span>
+                  {user.name}{" "}
+                  <span
+                    onClick={(user) => handleFollow(user)}
+                    className="text-primary me-2 pointer"
+                  >
+                    Follow
+                  </span>
                 </div>
               }
             ></List.Item.Meta>

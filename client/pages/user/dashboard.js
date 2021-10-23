@@ -28,8 +28,8 @@ const Dashboard = () => {
   const newsFeed = async () => {
     try {
       const { data } = await axios.get("/news-feed");
-      // console.log("user posts =>", data);
-      setPosts(data.posts);
+      console.log("user posts =>", data);
+      setPosts(data);
     } catch (err) {
       console.log(err);
     }

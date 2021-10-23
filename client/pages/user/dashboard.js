@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Modal } from "antd";
 import { UserContext } from "../../context";
 import UserRoute from "../../components/routes/UserRoute";
 import PostForm from "../../components/forms/PostForm";
@@ -11,11 +12,18 @@ import People from "../../components/cards/People";
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
+  // state
   const [content, setContent] = useState("");
   const [image, setImage] = useState({});
-  const [posts, setPosts] = useState([]);
   const [uploading, setUploading] = useState(false);
+  // posts
+  const [posts, setPosts] = useState([]);
+  // people
   const [people, setPeople] = useState([]);
+  // comments
+  const [comment, setComment] = useState("");
+  const [visibile, setVisible] = useState(false);
+  const [currentPost, setCurrentPost] = useState({});
 
   const router = useRouter();
 
@@ -137,6 +145,19 @@ const Dashboard = () => {
     }
   };
 
+  const handleComment = (post) => {
+    setCurrentPost(post);
+    setVisible(true);
+  };
+
+  const addComment = async () => {
+    console.log("test");
+  };
+
+  const removeComment = async () => {
+    console.log("test");
+  };
+
   return (
     <UserRoute>
       <div className="container-fluid">
@@ -162,6 +183,7 @@ const Dashboard = () => {
             handleDelete={handleDelete}
             handleLike={handleLike}
             handleUnlike={handleUnlike}
+            handleComment={handleComment}
           />
         </div>
         <div className="col-md-4">
@@ -172,6 +194,14 @@ const Dashboard = () => {
           )}
           <People people={people} handleFollow={handleFollow} />
         </div>
+        <Modal
+          visible={visibile}
+          onCancel={() => setVisible(false)}
+          title="Comment"
+          footer={null}
+        >
+          Show comment form
+        </Modal>
       </div>
     </UserRoute>
   );

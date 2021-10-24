@@ -10,6 +10,8 @@ import {
   newsFeed,
   likePost,
   unlikePost,
+  addComment,
+  removeComment,
 } from "../controllers/post";
 import { requireSignin, canEditAndDeletePost } from "../middlewares";
 
@@ -43,5 +45,9 @@ router.get("/news-feed", requireSignin, newsFeed);
 // likes
 router.put("/like-post", requireSignin, likePost);
 router.put("/unlike-post", requireSignin, unlikePost);
+
+// comments
+router.put("/add-comment", requireSignin, addComment);
+router.put("/remove-comment", requireSignin, removeComment);
 
 module.exports = router;

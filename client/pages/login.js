@@ -36,8 +36,7 @@ function Login() {
 
         // save in local storage
         window.localStorage.setItem("auth", JSON.stringify(data));
-
-        router.push("/");
+        router.push("/user/dashboard");
       }
     } catch (err) {
       console.log("ERROR => ", err);
@@ -46,7 +45,7 @@ function Login() {
     }
   };
 
-  if (state && state.token) router.push("/");
+  if (state && state.token) router.push("/user/dashboard");
 
   return (
     <div className="container-fluid">

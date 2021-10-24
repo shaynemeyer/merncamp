@@ -9,6 +9,7 @@ import UserRoute from "../../components/routes/UserRoute";
 import PostForm from "../../components/forms/PostForm";
 import PostList from "../../components/cards/PostList";
 import People from "../../components/cards/People";
+import CommentForm from "../../components/forms/CommentForm";
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -150,8 +151,20 @@ const Dashboard = () => {
     setVisible(true);
   };
 
-  const addComment = async () => {
-    console.log("test");
+  const addComment = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.put("/add-comment", {
+        postId: currentPost._id,
+        comment,
+      });
+
+      setComment("");
+      setVisible(false);
+      newsFeed();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const removeComment = async () => {
@@ -200,7 +213,11 @@ const Dashboard = () => {
           title="Comment"
           footer={null}
         >
-          Show comment form
+          <CommentForm
+            comment={comment}
+            setComment={setComment}
+            addComment={addComment}
+          />
         </Modal>
       </div>
     </UserRoute>

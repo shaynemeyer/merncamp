@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 export const register = async (req, res) => {
   // console.log("REGISTER ENDPOINT => ", req.body);
   const { name, email, password, secret } = req.body;
-  console.log(req.body);
+
   // validation
   if (!name) {
     return res.json({
@@ -98,7 +98,7 @@ export const login = async (req, res) => {
 };
 
 export const currentUser = async (req, res) => {
-  console.log(req.user);
+  // console.log(req.user);
   try {
     const user = await User.findById(req.user._id);
 
@@ -110,12 +110,10 @@ export const currentUser = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
-  console.log(req.body);
   const { email, newPassword, secret } = req.body;
 
   // validation
   if (!newPassword || newPassword.length < 6) {
-    console.log(!newPassword, newPassword.length);
     return res.json({
       error:
         "New password is required and should be at least 6 characters long",

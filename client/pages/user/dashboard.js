@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Modal } from "antd";
+import { Modal, Pagination } from "antd";
 import { UserContext } from "../../context";
 import UserRoute from "../../components/routes/UserRoute";
 import PostForm from "../../components/forms/PostForm";
@@ -25,19 +25,34 @@ const Dashboard = () => {
   const [comment, setComment] = useState("");
   const [visibile, setVisible] = useState(false);
   const [currentPost, setCurrentPost] = useState({});
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [page, setPage] = useState(1);
 
   const router = useRouter();
+
+  useEffect(() => {
+    fetchTotalPosts();
+  }, []);
+
+  const fetchTotalPosts = async () => {
+    try {
+      const { data } = await axios.get("/total-posts");
+      setTotalPosts(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     if (state && state.token) {
       newsFeed();
       findPeople();
     }
-  }, [state && state.token]);
+  }, [state && state.token, page]);
 
   const newsFeed = async () => {
     try {
-      const { data } = await axios.get("/news-feed");
+      const { data } = await axios.get(`/news-feed/${page}`);
       // console.log("user posts =>", data);
       setPosts(data);
     } catch (err) {
@@ -67,6 +82,7 @@ const Dashboard = () => {
       if (data.error) {
         toast.error(data.error);
       } else {
+        setPage(1);
         newsFeed();
         toast.success("Post created!");
         setContent("");
@@ -167,8 +183,22 @@ const Dashboard = () => {
     }
   };
 
-  const removeComment = async () => {
-    console.log("test");
+  const removeComment = async (postId, comment) => {
+    // console.log("PostID =>", postId, "& Comment =>", comment);
+
+    let answer = window.confirm("Are you sure?");
+    if (!answer) return;
+
+    try {
+      const { data } = await axios.delete("/remove-comment", {
+        postId,
+        comment,
+      });
+      console.log("COMMENT REMOVED =>", data);
+      newsFeed();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -197,6 +227,12 @@ const Dashboard = () => {
             handleLike={handleLike}
             handleUnlike={handleUnlike}
             handleComment={handleComment}
+            removeComment={removeComment}
+          />
+          <Pagination
+            current={page}
+            total={(totalPosts / 3) * 10}
+            onChange={(value) => setPage(value)}
           />
         </div>
         <div className="col-md-4">

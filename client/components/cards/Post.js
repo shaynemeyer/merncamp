@@ -30,7 +30,7 @@ const Post = ({
   return (
     <>
       {post && post.postedBy && (
-        <div key={post.id} className="card mb-5">
+        <div className="card mb-5">
           <div className="card-header">
             <Avatar
               size={40}
@@ -96,7 +96,10 @@ const Post = ({
             style={{ maxHeight: "125px", overflow: "scroll" }}
           >
             {post.comments.slice(0, commentsCount).map((c) => (
-              <li className="list-group-item d-flex justify-content-between align-items-start">
+              <li
+                className="list-group-item d-flex justify-content-between align-items-start"
+                key={c._id}
+              >
                 <div className="ms-2 me-auto">
                   <div>
                     <Avatar

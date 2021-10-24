@@ -6,6 +6,7 @@ const PostList = ({
   handleLike,
   handleUnlike,
   handleComment,
+  removeComment,
 }) => {
   return (
     <>
@@ -18,6 +19,7 @@ const PostList = ({
             handleDelete={handleDelete}
             handleLike={handleLike}
             handleUnlike={handleUnlike}
+            removeComment={removeComment}
           />
         ))}
     </>

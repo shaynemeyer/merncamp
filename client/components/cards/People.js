@@ -1,7 +1,11 @@
+import { useContext } from "react";
+import { UserContext } from "../../context";
 import { Avatar, List } from "antd";
 import { imageSource } from "../../functions";
 
-const People = ({ people, handleFollow }) => {
+const People = ({ people, handleFollow, handleUnfollow }) => {
+  const [state] = useContext(UserContext);
+
   return (
     <>
       <List
@@ -14,12 +18,24 @@ const People = ({ people, handleFollow }) => {
               title={
                 <div className="d-flex justify-content-between">
                   {user.name}
-                  <span
-                    onClick={() => handleFollow(user)}
-                    className="text-primary me-2 pointer"
-                  >
-                    Follow
-                  </span>
+                  {state &&
+                  state.user &&
+                  user.followers &&
+                  user.followers.includes(state.user._id) ? (
+                    <span
+                      onClick={() => handleUnfollow(user)}
+                      className="text-primary me-2 pointer"
+                    >
+                      Unfollow
+                    </span>
+                  ) : (
+                    <span
+                      onClick={() => handleFollow(user)}
+                      className="text-primary me-2 pointer"
+                    >
+                      Follow
+                    </span>
+                  )}
                 </div>
               }
             ></List.Item.Meta>

@@ -158,7 +158,7 @@ export const unlikePost = async (req, res) => {
 
 export const addComment = async (req, res) => {
   const { postId, comment } = req.body;
-
+  console.log("ADD COMMENT", req.body);
   const post = await Post.findOneAndUpdate(
     postId,
     {

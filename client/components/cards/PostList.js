@@ -8,6 +8,7 @@ const PostList = ({
   handleComment,
   removeComment,
 }) => {
+  posts && console.log("POSTS =>", posts);
   return (
     <>
       {posts &&

@@ -32,11 +32,11 @@ const PostComments = () => {
     if (!answer) return;
 
     try {
-      const { data } = await axios.delete("/remove-comment", {
+      const { data } = await axios.put("/remove-comment", {
         postId,
         comment,
       });
-      console.log("COMMENT REMOVED =>", data);
+      // console.log("COMMENT REMOVED =>", data);
       fetchPost();
     } catch (err) {
       console.log(err);

@@ -23,7 +23,7 @@ const Dashboard = () => {
   const [people, setPeople] = useState([]);
   // comments
   const [comment, setComment] = useState("");
-  const [visibile, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [currentPost, setCurrentPost] = useState({});
   const [totalPosts, setTotalPosts] = useState(0);
   const [page, setPage] = useState(1);
@@ -53,7 +53,7 @@ const Dashboard = () => {
   const newsFeed = async () => {
     try {
       const { data } = await axios.get(`/news-feed/${page}`);
-      // console.log("user posts =>", data);
+      console.log("user posts =>", data);
       setPosts(data);
     } catch (err) {
       console.log(err);
@@ -163,6 +163,7 @@ const Dashboard = () => {
   };
 
   const handleComment = (post) => {
+    console.log(post);
     setCurrentPost(post);
     setVisible(true);
   };
@@ -174,7 +175,14 @@ const Dashboard = () => {
         postId: currentPost._id,
         comment,
       });
-
+      console.log(
+        "POSTID =>",
+        currentPost._id,
+        "& COMMENT =>",
+        comment,
+        "& DATA =>",
+        data
+      );
       setComment("");
       setVisible(false);
       newsFeed();
@@ -190,7 +198,7 @@ const Dashboard = () => {
     if (!answer) return;
 
     try {
-      const { data } = await axios.delete("/remove-comment", {
+      const { data } = await axios.put("/remove-comment", {
         postId,
         comment,
       });
@@ -244,7 +252,7 @@ const Dashboard = () => {
           <People people={people} handleFollow={handleFollow} />
         </div>
         <Modal
-          visible={visibile}
+          visible={visible}
           onCancel={() => setVisible(false)}
           title="Comment"
           footer={null}

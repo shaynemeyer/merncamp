@@ -21,6 +21,7 @@ const Post = ({
   handleComment,
   handleLike,
   handleUnlike,
+  handleDelete,
   commentsCount = 2,
   removeComment,
 }) => {
@@ -51,30 +52,37 @@ const Post = ({
           <div className="card-footer">
             {post.image && <PostImage url={post.image.url} />}
             <div className="d-flex">
-              {state &&
-              state.user &&
-              post.likes &&
-              post.likes.includes(state.user._id) ? (
-                <HeartFilled
-                  onClick={() => handleUnlike(post._id)}
-                  className="text-danger pt-2 h5"
-                />
-              ) : (
-                <HeartOutlined
-                  onClick={() => handleLike(post._id)}
-                  className="text-danger pt-2 h5"
-                />
-              )}
+              {handleLike !== undefined &&
+                (state &&
+                state.user &&
+                post.likes &&
+                post.likes.includes(state.user._id) ? (
+                  <HeartFilled
+                    onClick={() => handleUnlike(post._id)}
+                    className="text-danger pt-2 h5"
+                  />
+                ) : (
+                  <HeartOutlined
+                    onClick={() => handleLike(post._id)}
+                    className="text-danger pt-2 h5"
+                  />
+                ))}
               <div className="pt-2 px-1">{post.likes.length} likes</div>
-              <CommentOutlined
-                onClick={() => handleComment(post)}
-                className="text-danger pt-2 h5 px-2"
-              />
-              <div className="pt-2 px-1">
-                <Link href={`/post/${post._id}`}>
-                  <a>{post.comments.length} comments</a>
-                </Link>
-              </div>
+              {handleComment !== undefined ? (
+                <>
+                  <CommentOutlined
+                    onClick={() => handleComment(post)}
+                    className="text-danger pt-2 h5 px-2"
+                  />
+                  <div className="pt-2 px-1">
+                    <Link href={`/post/${post._id}`}>
+                      <a>{post.comments.length} comments</a>
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <div className="pt-2 px-1">{post.comments.length} comments</div>
+              )}
 
               {state && state.user && state.user._id === post.postedBy._id && (
                 <>
@@ -82,10 +90,12 @@ const Post = ({
                     onClick={() => router.push(`/user/post/${post._id}`)}
                     className="text-danger pt-2 h5 px-1 mx-auto"
                   />
-                  <DeleteOutlined
-                    onClick={() => handleDelete(post)}
-                    className="text-danger pt-2 h5 px-2"
-                  />
+                  {handleDelete !== undefined && (
+                    <DeleteOutlined
+                      onClick={() => handleDelete(post)}
+                      className="text-danger pt-2 h5 px-2"
+                    />
+                  )}
                 </>
               )}
             </div>

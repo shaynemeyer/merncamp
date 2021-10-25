@@ -10,6 +10,7 @@ import PostForm from "../../components/forms/PostForm";
 import PostList from "../../components/cards/PostList";
 import People from "../../components/cards/People";
 import CommentForm from "../../components/forms/CommentForm";
+import Search from "../../components/Search";
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -53,7 +54,7 @@ const Dashboard = () => {
   const newsFeed = async () => {
     try {
       const { data } = await axios.get(`/news-feed/${page}`);
-      console.log("user posts =>", data);
+      // console.log("user posts =>", data);
       setPosts(data);
     } catch (err) {
       console.log(err);
@@ -163,7 +164,7 @@ const Dashboard = () => {
   };
 
   const handleComment = (post) => {
-    console.log(post);
+    // console.log(post);
     setCurrentPost(post);
     setVisible(true);
   };
@@ -175,14 +176,14 @@ const Dashboard = () => {
         postId: currentPost._id,
         comment,
       });
-      console.log(
-        "POSTID =>",
-        currentPost._id,
-        "& COMMENT =>",
-        comment,
-        "& DATA =>",
-        data
-      );
+      // console.log(
+      //   "POSTID =>",
+      //   currentPost._id,
+      //   "& COMMENT =>",
+      //   comment,
+      //   "& DATA =>",
+      //   data
+      // );
       setComment("");
       setVisible(false);
       newsFeed();
@@ -202,7 +203,7 @@ const Dashboard = () => {
         postId,
         comment,
       });
-      console.log("COMMENT REMOVED =>", data);
+      // console.log("COMMENT REMOVED =>", data);
       newsFeed();
     } catch (err) {
       console.log(err);
@@ -241,9 +242,12 @@ const Dashboard = () => {
             current={page}
             total={(totalPosts / 3) * 10}
             onChange={(value) => setPage(value)}
+            className="pb-5"
           />
         </div>
         <div className="col-md-4">
+          <Search />
+          <br />
           {state && state.user && state.user.following && (
             <Link href={`/user/following`}>
               <a className="h6">{state.user.following.length} Following</a>

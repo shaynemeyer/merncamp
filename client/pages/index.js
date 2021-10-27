@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context";
 import Head from "next/head";
 import axios from "axios";
@@ -13,9 +13,12 @@ const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
 
 function HomePage({ posts }) {
   const [state, setState] = useContext(UserContext);
+  const [newsFeed, setNewsFeed] = useState([]);
 
   useEffect(() => {
-    console.log("SOCKETIO ON JOIN =>", socket);
+    socket.on("new-post", (newPost) => {
+      setNewsFeed(newPost, ...posts);
+    });
   }, []);
 
   const head = () => (
@@ -35,14 +38,17 @@ function HomePage({ posts }) {
       />
     </Head>
   );
+
+  const collection = newsFeed.length > 0 ? newsFeed : posts;
+
   return (
     <>
       {head()}
       <ParallaxBG url="/images/default.jpeg" />
       <div className="container">
         <div className="row pt-5">
-          {posts &&
-            posts.map((post) => (
+          {collection &&
+            collection.map((post) => (
               <div key={post._id} className="col-md-4">
                 <Link href={`/post/view/${post._id}`}>
                   <a>

@@ -11,6 +11,11 @@ import PostList from "../../components/cards/PostList";
 import People from "../../components/cards/People";
 import CommentForm from "../../components/forms/CommentForm";
 import Search from "../../components/Search";
+import io from "socket.io-client";
+
+const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
+  reconnection: true,
+});
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -72,13 +77,12 @@ const Dashboard = () => {
 
   const postSubmit = async (e) => {
     e.preventDefault();
-    // console.log("post =>", content);
+
     try {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_API}/create-post`,
         { content, image }
       );
-      // console.log("create post =>", data);
 
       if (data.error) {
         toast.error(data.error);
@@ -88,6 +92,8 @@ const Dashboard = () => {
         toast.success("Post created!");
         setContent("");
         setImage({});
+        // socket
+        socket.emit("new-post", data);
       }
     } catch (err) {
       console.log(err);

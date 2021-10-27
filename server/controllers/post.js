@@ -206,3 +206,16 @@ export const posts = async (req, res) => {
     console.log(err);
   }
 };
+
+export const getPost = async (req, res) => {
+  console.log("PARAMS =>", req.params);
+  try {
+    const post = await Post.findById(req.params._id)
+      .populate("postedBy", "_id name image")
+      .populate("comments.postedBy", "_id name image");
+
+    res.json(post);
+  } catch (err) {
+    console.log(err);
+  }
+};

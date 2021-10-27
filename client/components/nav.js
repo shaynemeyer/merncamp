@@ -67,6 +67,15 @@ const Nav = () => {
               </a>
             </Link>
           </li>
+          {state.user.role === "Admin" && (
+            <li>
+              <Link href="/admin">
+                <a className={`nav-link ${current === "/admin" && "active"}`}>
+                  Admin
+                </a>
+              </Link>
+            </li>
+          )}
           <li>
             <a onClick={logout} className="nav-link">
               Logout

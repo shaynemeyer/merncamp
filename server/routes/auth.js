@@ -14,7 +14,7 @@ import {
   searchUser,
   getUser,
 } from "../controllers/auth";
-import { requireSignin } from "../middlewares";
+import { isAdmin, requireSignin } from "../middlewares";
 
 const router = express.Router();
 
@@ -32,5 +32,7 @@ router.get("/user-following", requireSignin, userFollowing);
 
 router.get("/search-user/:query", searchUser);
 router.get("/user/:username", getUser);
+
+router.get("/current-admin", requireSignin, isAdmin, currentUser);
 
 module.exports = router;

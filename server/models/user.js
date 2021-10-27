@@ -29,6 +29,10 @@ const userSchema = new Schema(
       unique: true,
       required: true,
     },
+    role: {
+      type: String,
+      default: "Subscriber",
+    },
     about: {},
     image: {
       url: String,

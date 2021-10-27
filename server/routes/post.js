@@ -16,7 +16,7 @@ import {
   posts,
   getPost,
 } from "../controllers/post";
-import { requireSignin, canEditAndDeletePost } from "../middlewares";
+import { requireSignin, canEditAndDeletePost, isAdmin } from "../middlewares";
 
 const router = express.Router();
 
@@ -58,5 +58,8 @@ router.get("/total-posts", totalPosts);
 router.get("/posts", posts);
 
 router.get("/post/:_id", getPost);
+
+// Admin
+router.delete("/admin/delete-post/:_id", requireSignin, isAdmin, deletePost);
 
 module.exports = router;

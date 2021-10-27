@@ -208,7 +208,6 @@ export const posts = async (req, res) => {
 };
 
 export const getPost = async (req, res) => {
-  console.log("PARAMS =>", req.params);
   try {
     const post = await Post.findById(req.params._id)
       .populate("postedBy", "_id name image")

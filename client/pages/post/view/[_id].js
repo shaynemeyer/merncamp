@@ -22,7 +22,7 @@ function SinglePost({ post }) {
     </Head>
   );
 
-  export const imageSource = (post) => {
+  const imageSource = (post) => {
     if (post.image) return post.image.url;
     return "/images/default.jpeg";
   };
@@ -44,7 +44,7 @@ function SinglePost({ post }) {
 
 export async function getServerSideProps(ctx) {
   const { data } = await axios.get(`/post/${ctx.params._id}`);
-  console.log(data);
+  // console.log(data);
   return {
     props: {
       post: data,

@@ -1,13 +1,22 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context";
 import Head from "next/head";
 import axios from "axios";
 import ParallaxBG from "../components/cards/ParallaxBG";
 import PostPublic from "../components/cards/PostPublic";
 import Link from "next/link";
+import io from "socket.io-client";
+
+const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
+  reconnection: true,
+});
 
 function HomePage({ posts }) {
   const [state, setState] = useContext(UserContext);
+
+  useEffect(() => {
+    console.log("SOCKETIO ON JOIN =>", socket);
+  }, []);
 
   const head = () => (
     <Head>
@@ -34,7 +43,7 @@ function HomePage({ posts }) {
         <div className="row pt-5">
           {posts &&
             posts.map((post) => (
-              <div className="col-md-4">
+              <div key={post._id} className="col-md-4">
                 <Link href={`/post/view/${post._id}`}>
                   <a>
                     <PostPublic key={post._id} post={post} />

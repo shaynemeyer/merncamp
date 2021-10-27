@@ -1,11 +1,13 @@
 import { useContext } from "react";
 import { UserContext } from "../../context";
 import { Avatar, List } from "antd";
+import Link from "next/link";
 import { imageSource } from "../../functions";
 
 const People = ({ people, handleFollow, handleUnfollow }) => {
   const [state] = useContext(UserContext);
 
+  console.log("PEOPLE =>", JSON.stringify(people));
   return (
     <>
       <List
@@ -17,7 +19,10 @@ const People = ({ people, handleFollow, handleUnfollow }) => {
               avatar={<Avatar src={imageSource(user)} />}
               title={
                 <div className="d-flex justify-content-between">
-                  {user.name}
+                  <Link href={`/user/${user.username}`}>
+                    <a>{user.name}</a>
+                  </Link>
+
                   {state &&
                   state.user &&
                   user.followers &&

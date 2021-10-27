@@ -207,6 +207,7 @@ export const findPeople = async (req, res) => {
     const people = await User.find({ _id: { $nin: following } })
       .select("-password, -secret")
       .limit(10);
+    console.log(people);
     res.json(people);
   } catch (err) {
     console.log(err);
@@ -290,6 +291,17 @@ export const searchUser = async (req, res) => {
         { username: { $regex: query, $options: "i" } },
       ],
     }).select("-password -secret");
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).select(
+      "-password -secret"
+    );
     res.json(user);
   } catch (err) {
     console.log(err);
